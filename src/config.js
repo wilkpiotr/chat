@@ -1,6 +1,7 @@
 import Navigo from 'navigo';
 import axios from 'axios';
 import { initList } from './messages'
+import { addMessage } from './add-new-msg';
 
 const router = new Navigo();
 
@@ -10,6 +11,7 @@ export const chat = () => {
         'chat': (params) => {
             chatScreen();
             initList();
+            addMessage();           
         },
         '*': (params) => {
             loginScreen();
@@ -22,11 +24,11 @@ export const chat = () => {
 
 const loginScreen = () => {
     const body = document.querySelector('body');
-    return body.innerHTML = `<p id="start-info">LAIT Chat</p>
+    return body.innerHTML = `
     <div class="login">
-    <h3>LaIT CHAT</h3>
+    <p id="start-info">LAIT Chat</p>
     <form action="/" method="">
-      <label for="login">Username</label>
+      <label for="login">Username:</label>
       <input type="text" id="login" placeholder="Enter your nickname">
       <button class="enter" type="button">Enter Chat</button>
     </form>
@@ -35,13 +37,14 @@ const loginScreen = () => {
 
 const chatScreen = () => {
     const body = document.querySelector('body');
-    return body.innerHTML = `<p id="start-info">LAIT Chat</p>
+    return body.innerHTML = `
     <div class="chat-window">
+    <p id="start-info">LAIT Chat</p>
         <div class="chat-screen">
           <p class="message">user1: example massage</p>
         </div>
         <form action="/" method="">
-          <textarea type="text" id="message"  rows="6" cols="50" placeholder="New Massage"></textarea>
+          <textarea type="text" id="message"  rows="6" cols="70" placeholder="New Massage"></textarea>
           <button class="add" type="button">Add</button>
         </form>
       </div>`;

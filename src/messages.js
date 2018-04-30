@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { deleteMessage } from './add-new-msg'
+
 
 
 let massageContainer;
 
 const getMessages = () => {
-    // const msgContainer = document.querySelector('.chat-screen');
     return axios
     .get('http://194.182.69.199:3000/chat', {
         headers: {
@@ -12,21 +13,22 @@ const getMessages = () => {
         }
     })
     .then((result) => { 
-        console.log(result.data)
         return result.data; })
 }
 
 const showMessages = (msgs) => {
     return msgs.reduce((html, msg) => {
-        console.log(msg.owner)
-        return html + `<div class="message-item" data-owner="${msg.owner}"><div class="message-header"><span class="message-owner">${msg.author}:</span></div><div class="message-content"><span class="message-body">${msg.message}</span></div></div>`;
-        console.log(html)
+        if (msg.owner === true) {
+        return html + `<div class="message-item" data-owner="${msg.owner}"><div class="message-header"><p class="message-owner">${msg.author}:</p></div><div class="message-content"><p class="message-body" data-owner="${msg.owner}" id="${msg.id}">${msg.message}<img src="/images/delete.png" alt="delete" class="delete-img" width="30px" height="30px"></p></div></div>`;}
+        else return html + `<div class="message-item" data-owner="${msg.owner}"><div class="message-header"><p class="message-owner">${msg.author}:</p></div><div class="message-content"><p class="message-body" data-owner="${msg.owner}" id="${msg.id}">${msg.message}</p></div></div>`
     },'');
+    
 }
 
 export const initList = () => {
     massageContainer = document.querySelector('.chat-screen');
     renderList();
+    
 }
 
 const renderList = () => {
@@ -34,4 +36,17 @@ const renderList = () => {
     .then((msgs) => {
         massageContainer.innerHTML = showMessages(msgs);
     })
+    .then(deleteMessage)
+    .then(scrollToBottom)
+}
+
+const scrollToBottom = () => {
+    massageContainer = document.querySelector('.chat-screen');
+    massageContainer.scrollTop = massageContainer.scrollHeight;
+}
+
+
+
+export const reloadMessages = () => {
+    setInterval(initList, 10000);
 }
